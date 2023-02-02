@@ -1,0 +1,6 @@
+type Song {
+    id: UUID!
+    title: String!
+    details: String
+    participants: [Participant!]! @goField(forceResolver: true)
+}

@@ -1,0 +1,10 @@
+schema {
+    query: QueryRoot
+}
+
+scalar UUID
+scalar URL
+
+type QueryRoot {
+    song(id: UUID): Song!
+}

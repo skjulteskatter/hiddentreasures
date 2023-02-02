@@ -1,0 +1,27 @@
+directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION
+    | FIELD_DEFINITION
+
+type Contributor {
+    id: UUID!
+    name: String!
+    image: URL
+    details: ContributorDetails
+}
+
+type ContributorDetails {
+    biography: String
+    originCountry: String
+}
+
+enum ParticipantType {
+    author
+    composer
+    arranger
+    artist
+    editor
+}
+
+type Participant {
+    type: ParticipantType!
+    contributor: Contributor!
+}
