@@ -9,4 +9,5 @@ COPY . .
 
 EXPOSE $PORT
 
-CMD ["pnpm", "start"]
+RUN pnpm exec tsc
+CMD ["node", "./build"]
