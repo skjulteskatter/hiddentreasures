@@ -11,7 +11,7 @@ jobs:
     name: Deploy Sheets Service
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: gcr.io/${{ vars.GCP_PROJECT_ID }}/sheets
+      IMAGE_NAME: gcr.io/${{ vars.GCP_PROJECT_ID }}/sheets:$GITHUB_SHA
     steps:
 
       - name: Login
