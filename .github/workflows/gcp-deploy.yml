@@ -17,8 +17,8 @@ jobs:
       - name: Login
         uses: google-github-actions/setup-gcloud@v0
         with:
-          project_id: $GCP_PROJECT_ID
-          service_account_email: $GCP_EMAIL
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          service_account_email: ${{ vars.GCP_EMAIL }}
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Configure Docker
@@ -32,6 +32,3 @@ jobs:
 
       - name: Push Docker image
         run: docker push $IMAGE_NAME
-
-      - name: Deploy Docker image
-        run: gcloud run deploy $GCP_PROJECT_ID --image $IMAGE_NAME --region europe-west4 --platform managed
