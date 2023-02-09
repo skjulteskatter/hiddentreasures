@@ -245,17 +245,19 @@ async function getOrSetFile(id: string): Promise<string | null> {
 async function getOrSetOsmdInstance(
     options: ISheetMusicOptions
 ): Promise<OpenSheetMusicDisplay | null> {
+
     //Key includes option that modifies the data before being loaded as an osmd instance
     const key: string = `${options.id}CLEF:${options.clef}DRAWPARTNAMES:${options.drawPartNames}PAGEFORMAT:${options.pageFormat}`
 
-    const osmdInstance = await createOsmdInstance(options)
+    if (!osmdInstances[key]) {
+        osmdInstances[key] = await createOsmdInstance(options)
 
-    osmdInstances[key] = osmdInstance
+        //Keep each value 2 minutes
+        setTimeout(() => delete osmdInstances[key], 120000)
+    }
 
-    //Keep each value 5 minutes
-    setTimeout(() => delete osmdInstances[key], 300000)
 
-    return osmdInstance
+    return osmdInstances[key]
 }
 
 async function createOsmdInstance(
