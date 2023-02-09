@@ -54,14 +54,8 @@ export async function getSheetMusicDetails(
         id: id,
         clef: "treble",
         drawPartNames: true,
-        guitarChords: "none",
-        imageFormat: "svg",
-        optimizeSVGsize: false,
         pageFormat: "Endless",
-        transposition: 0,
         width: 1440,
-        zoom: 1,
-        instruments: null,
     })
 
     if (instance === null) return null
