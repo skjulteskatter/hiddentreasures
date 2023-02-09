@@ -1,22 +1,19 @@
-import { Request, Response } from 'express';
-import config from './config';
+import { Request, Response } from "express"
+import config from "./config"
 
-const API_TOKEN = "ApiToken";
+const API_TOKEN = "ApiToken"
 
-export function Authorize(req: Request, res: Response): boolean{
-    try {
-        const [schema, value] = req.headers.authorization?.split(" ") ?? [];
-        
-        if (schema.toLowerCase() === API_TOKEN.toLowerCase() && value === config.ApiToken){
-            return true
-        }
+export function Authorize(req: Request, res: Response): boolean {
+    const [schema, value] = req.headers.authorization?.split(" ") ?? []
 
-        throw new Error("Unauthorized");
+    if (
+        schema.toLowerCase() === API_TOKEN.toLowerCase() &&
+        value === config.secret
+    ) {
+        return true
     }
-    catch (e) {
-        res.status(401).send("UnauthorizedError");
-        res.end();
 
-        throw e;
-    }
+    res.status(401).send("UnauthorizedError")
+    res.end()
+    return false
 }

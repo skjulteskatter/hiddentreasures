@@ -1,9 +1,12 @@
-// import { config } from 'dotenv';
+import { config } from 'dotenv';
 
-// config();
+config();
 
 export default {
-    ApiToken: process.env.ST_APITOKEN ?? '123456',
-    STAddress: process.env.ST_ADDRESS ?? 'https://localhost:44301',
-    Port: process.env.PORT ?? '5016',
+    secret: process.env.ST_APITOKEN ?? "123456",
+    sanity: {
+        token: process.env.SANITY_TOKEN!,
+        projectId: process.env.SANITY_PROJECT_ID!,
+    },
+    port: process.env.PORT ?? "5016",
 }

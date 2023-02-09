@@ -1,9 +1,17 @@
-export default class SheetMusicDetails {
-    public instruments: string[];
-    public id: string;
+interface ISheetMusicDetails {
+    id: string
+    title: string
+    instruments: string[]
+}
 
-    constructor(i: any) {
+export default class SheetMusicDetails implements ISheetMusicDetails {
+    public instruments: string[] = []
+    public id: string
+    public title: string
+
+    constructor(i: ISheetMusicDetails) {
+        this.instruments = i.instruments.filter(i => i.trim() != "")
         this.id = i.id;
-        this.instruments = i.instruments;
+        this.title = i.title;
     }
 }
