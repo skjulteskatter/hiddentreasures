@@ -8,5 +8,6 @@ RUN pnpm i
 
 COPY . .
 
-EXPOSE 80
+EXPOSE $PORT
+
 CMD ["pnpm", "start"]
