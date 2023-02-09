@@ -243,7 +243,7 @@ async function getOrSetFile(id: string): Promise<string | null> {
 }
 
 async function getOrSetOsmdInstance(
-    options: ISheetMusicOptions
+    options: CreateOsmdInstanceOptions
 ): Promise<OpenSheetMusicDisplay | null> {
 
     //Key includes option that modifies the data before being loaded as an osmd instance
@@ -260,8 +260,16 @@ async function getOrSetOsmdInstance(
     return osmdInstances[key]
 }
 
+type CreateOsmdInstanceOptions = {
+    width: number,
+        pageFormat: string,
+        id: string,
+        drawPartNames: boolean,
+        clef: string,
+}
+
 async function createOsmdInstance(
-    options: ISheetMusicOptions
+    options: CreateOsmdInstanceOptions
 ): Promise<OpenSheetMusicDisplay | null> {
     const div = document.createElement("div")
     div.id = `browserlessDiv`
