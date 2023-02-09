@@ -75,7 +75,6 @@ export async function getSheetMusicImages(
 ): Promise<string[]> {
     let scale: number = options.width / _standardWidth
     let osmdInstance: OpenSheetMusicDisplay | null
-    let loadParameter: string
 
     try {
         osmdInstance = await getOrSetOsmdInstance(options)
@@ -90,7 +89,7 @@ export async function getSheetMusicImages(
                 ? options.transposition - 12
                 : options.transposition
 
-        var changedInstruments: boolean = includeInstruments(
+        const changedInstruments: boolean = includeInstruments(
             options,
             osmdInstance
         )
