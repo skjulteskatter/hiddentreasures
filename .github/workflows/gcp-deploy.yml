@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Setup Gcloud Account
+    name: Deploy Sheets Service
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: gcr.io/${{ vars.GCP_PROJECT_ID }}/sheets
@@ -32,3 +32,6 @@ jobs:
 
       - name: Push Docker image
         run: docker push $IMAGE_NAME
+
+      - name: Deploy Docker image
+        run: gcloud run deploy sheets --image $IMAGE_NAME --region europe-west4
