@@ -4,6 +4,13 @@ schema {
 
 scalar UUID
 scalar URL
+scalar LanguageKey
+
+type LocalizedString {
+    value: LanguageKey!
+    language: LanguageKey!
+    available: [LanguageKey!]!
+}
 
 type QueryRoot {
     song(id: UUID): Song!

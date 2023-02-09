@@ -1,0 +1,22 @@
+type Collection {
+    id: UUID!
+    title: LocalizedString!
+    description: LocalizedString
+    key: String!
+    defaultContent: CollectionDefaultContent!
+    defaultSort: CollectionDefaultSort!
+}
+
+enum CollectionDefaultContent {
+    lyrics
+    sheets
+    tracks
+}
+
+enum CollectionDefaultSort {
+    title
+    number
+    author
+    composer
+    genre
+}

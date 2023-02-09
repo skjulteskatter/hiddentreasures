@@ -1,8 +1,16 @@
 type Song {
     id: UUID!
-    title: String!
-    details: String
-    participants: [Participant!]! @goField(forceResolver: true)
+    title: LocalizedString!
+    collections: [SongCollection!]!
+    details: LocalizedString @goField(forceResolver: true)
+    participants: [Participant!]!
+    audioFiles: [AudioFile!]! @goField(forceResolver: true)
+    sheets: [Sheet!]! @goField(forceResolver: true)
+}
+
+type SongCollection {
+    id: UUID!
+    identifier: String
 }
 
 interface File {
@@ -18,4 +26,24 @@ type AudioFile implements File {
 type VideoFile implements File {
     id: UUID!
     url: URL!
+}
+
+type Sheet {
+    id: UUID!
+    fileType: SheetFileType!
+    contentType: SheetContent!
+}
+
+enum SheetContent {
+    lead
+    lyrics
+    fullScore
+    fivePart
+    smallBand
+}
+
+enum SheetFileType {
+    musicxml
+    pdf
+    sibelius
 }

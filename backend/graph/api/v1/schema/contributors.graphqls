@@ -3,14 +3,12 @@ directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITI
 
 type Contributor {
     id: UUID!
-    name: String!
-    image: URL
-    details: ContributorDetails
-}
-
-type ContributorDetails {
-    biography: String
+    displayName: String!
+    subtitle: String
+    birthYear: Int
     originCountry: String
+    image: URL
+    biography: LocalizedString @goField(forceResolver: true)
 }
 
 enum ParticipantType {
@@ -22,6 +20,7 @@ enum ParticipantType {
 }
 
 type Participant {
+    id: UUID!
     type: ParticipantType!
-    contributor: Contributor!
+    contributor: Contributor! @goField(forceResolver: true)
 }

@@ -23,28 +23,56 @@ func (AudioFile) IsFile()             {}
 func (this AudioFile) GetID() string  { return this.ID }
 func (this AudioFile) GetURL() string { return this.URL }
 
-type Contributor struct {
-	ID      string              `json:"id"`
-	Name    string              `json:"name"`
-	Image   *string             `json:"image"`
-	Details *ContributorDetails `json:"details"`
+type Collection struct {
+	ID             string                   `json:"id"`
+	Title          *LocalizedString         `json:"title"`
+	Description    *LocalizedString         `json:"description"`
+	Key            string                   `json:"key"`
+	DefaultContent CollectionDefaultContent `json:"defaultContent"`
+	DefaultSort    CollectionDefaultSort    `json:"defaultSort"`
 }
 
-type ContributorDetails struct {
-	Biography     *string `json:"biography"`
-	OriginCountry *string `json:"originCountry"`
+type Contributor struct {
+	ID            string           `json:"id"`
+	DisplayName   string           `json:"displayName"`
+	Subtitle      *string          `json:"subtitle"`
+	BirthYear     *int             `json:"birthYear"`
+	OriginCountry *string          `json:"originCountry"`
+	Image         *string          `json:"image"`
+	Biography     *LocalizedString `json:"biography"`
+}
+
+type LocalizedString struct {
+	Value     string   `json:"value"`
+	Language  string   `json:"language"`
+	Available []string `json:"available"`
 }
 
 type Participant struct {
+	ID          string          `json:"id"`
 	Type        ParticipantType `json:"type"`
 	Contributor *Contributor    `json:"contributor"`
 }
 
+type Sheet struct {
+	ID          string        `json:"id"`
+	FileType    SheetFileType `json:"fileType"`
+	ContentType SheetContent  `json:"contentType"`
+}
+
 type Song struct {
-	ID           string         `json:"id"`
-	Title        string         `json:"title"`
-	Details      *string        `json:"details"`
-	Participants []*Participant `json:"participants"`
+	ID           string            `json:"id"`
+	Title        *LocalizedString  `json:"title"`
+	Collections  []*SongCollection `json:"collections"`
+	Details      *LocalizedString  `json:"details"`
+	Participants []*Participant    `json:"participants"`
+	AudioFiles   []*AudioFile      `json:"audioFiles"`
+	Sheets       []*Sheet          `json:"sheets"`
+}
+
+type SongCollection struct {
+	ID         string  `json:"id"`
+	Identifier *string `json:"identifier"`
 }
 
 type VideoFile struct {
@@ -55,6 +83,96 @@ type VideoFile struct {
 func (VideoFile) IsFile()             {}
 func (this VideoFile) GetID() string  { return this.ID }
 func (this VideoFile) GetURL() string { return this.URL }
+
+type CollectionDefaultContent string
+
+const (
+	CollectionDefaultContentLyrics CollectionDefaultContent = "lyrics"
+	CollectionDefaultContentSheets CollectionDefaultContent = "sheets"
+	CollectionDefaultContentTracks CollectionDefaultContent = "tracks"
+)
+
+var AllCollectionDefaultContent = []CollectionDefaultContent{
+	CollectionDefaultContentLyrics,
+	CollectionDefaultContentSheets,
+	CollectionDefaultContentTracks,
+}
+
+func (e CollectionDefaultContent) IsValid() bool {
+	switch e {
+	case CollectionDefaultContentLyrics, CollectionDefaultContentSheets, CollectionDefaultContentTracks:
+		return true
+	}
+	return false
+}
+
+func (e CollectionDefaultContent) String() string {
+	return string(e)
+}
+
+func (e *CollectionDefaultContent) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = CollectionDefaultContent(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid CollectionDefaultContent", str)
+	}
+	return nil
+}
+
+func (e CollectionDefaultContent) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type CollectionDefaultSort string
+
+const (
+	CollectionDefaultSortTitle    CollectionDefaultSort = "title"
+	CollectionDefaultSortNumber   CollectionDefaultSort = "number"
+	CollectionDefaultSortAuthor   CollectionDefaultSort = "author"
+	CollectionDefaultSortComposer CollectionDefaultSort = "composer"
+	CollectionDefaultSortGenre    CollectionDefaultSort = "genre"
+)
+
+var AllCollectionDefaultSort = []CollectionDefaultSort{
+	CollectionDefaultSortTitle,
+	CollectionDefaultSortNumber,
+	CollectionDefaultSortAuthor,
+	CollectionDefaultSortComposer,
+	CollectionDefaultSortGenre,
+}
+
+func (e CollectionDefaultSort) IsValid() bool {
+	switch e {
+	case CollectionDefaultSortTitle, CollectionDefaultSortNumber, CollectionDefaultSortAuthor, CollectionDefaultSortComposer, CollectionDefaultSortGenre:
+		return true
+	}
+	return false
+}
+
+func (e CollectionDefaultSort) String() string {
+	return string(e)
+}
+
+func (e *CollectionDefaultSort) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = CollectionDefaultSort(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid CollectionDefaultSort", str)
+	}
+	return nil
+}
+
+func (e CollectionDefaultSort) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
 
 type ParticipantType string
 
@@ -100,5 +218,95 @@ func (e *ParticipantType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e ParticipantType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type SheetContent string
+
+const (
+	SheetContentLead      SheetContent = "lead"
+	SheetContentLyrics    SheetContent = "lyrics"
+	SheetContentFullScore SheetContent = "fullScore"
+	SheetContentFivePart  SheetContent = "fivePart"
+	SheetContentSmallBand SheetContent = "smallBand"
+)
+
+var AllSheetContent = []SheetContent{
+	SheetContentLead,
+	SheetContentLyrics,
+	SheetContentFullScore,
+	SheetContentFivePart,
+	SheetContentSmallBand,
+}
+
+func (e SheetContent) IsValid() bool {
+	switch e {
+	case SheetContentLead, SheetContentLyrics, SheetContentFullScore, SheetContentFivePart, SheetContentSmallBand:
+		return true
+	}
+	return false
+}
+
+func (e SheetContent) String() string {
+	return string(e)
+}
+
+func (e *SheetContent) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SheetContent(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SheetContent", str)
+	}
+	return nil
+}
+
+func (e SheetContent) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type SheetFileType string
+
+const (
+	SheetFileTypeMusicxml SheetFileType = "musicxml"
+	SheetFileTypePDF      SheetFileType = "pdf"
+	SheetFileTypeSibelius SheetFileType = "sibelius"
+)
+
+var AllSheetFileType = []SheetFileType{
+	SheetFileTypeMusicxml,
+	SheetFileTypePDF,
+	SheetFileTypeSibelius,
+}
+
+func (e SheetFileType) IsValid() bool {
+	switch e {
+	case SheetFileTypeMusicxml, SheetFileTypePDF, SheetFileTypeSibelius:
+		return true
+	}
+	return false
+}
+
+func (e SheetFileType) String() string {
+	return string(e)
+}
+
+func (e *SheetFileType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SheetFileType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SheetFileType", str)
+	}
+	return nil
+}
+
+func (e SheetFileType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
