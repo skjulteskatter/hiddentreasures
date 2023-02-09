@@ -8,6 +8,21 @@ import (
 	"strconv"
 )
 
+type File interface {
+	IsFile()
+	GetID() string
+	GetURL() string
+}
+
+type AudioFile struct {
+	ID  string `json:"id"`
+	URL string `json:"url"`
+}
+
+func (AudioFile) IsFile()             {}
+func (this AudioFile) GetID() string  { return this.ID }
+func (this AudioFile) GetURL() string { return this.URL }
+
 type Contributor struct {
 	ID      string              `json:"id"`
 	Name    string              `json:"name"`
@@ -31,6 +46,15 @@ type Song struct {
 	Details      *string        `json:"details"`
 	Participants []*Participant `json:"participants"`
 }
+
+type VideoFile struct {
+	ID  string `json:"id"`
+	URL string `json:"url"`
+}
+
+func (VideoFile) IsFile()             {}
+func (this VideoFile) GetID() string  { return this.ID }
+func (this VideoFile) GetURL() string { return this.URL }
 
 type ParticipantType string
 

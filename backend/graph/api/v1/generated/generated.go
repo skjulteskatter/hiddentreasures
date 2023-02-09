@@ -44,6 +44,11 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	AudioFile struct {
+		ID  func(childComplexity int) int
+		URL func(childComplexity int) int
+	}
+
 	Contributor struct {
 		Details func(childComplexity int) int
 		ID      func(childComplexity int) int
@@ -71,6 +76,11 @@ type ComplexityRoot struct {
 		Participants func(childComplexity int) int
 		Title        func(childComplexity int) int
 	}
+
+	VideoFile struct {
+		ID  func(childComplexity int) int
+		URL func(childComplexity int) int
+	}
 }
 
 type QueryRootResolver interface {
@@ -94,6 +104,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "AudioFile.id":
+		if e.complexity.AudioFile.ID == nil {
+			break
+		}
+
+		return e.complexity.AudioFile.ID(childComplexity), true
+
+	case "AudioFile.url":
+		if e.complexity.AudioFile.URL == nil {
+			break
+		}
+
+		return e.complexity.AudioFile.URL(childComplexity), true
 
 	case "Contributor.details":
 		if e.complexity.Contributor.Details == nil {
@@ -191,6 +215,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Song.Title(childComplexity), true
 
+	case "VideoFile.id":
+		if e.complexity.VideoFile.ID == nil {
+			break
+		}
+
+		return e.complexity.VideoFile.ID(childComplexity), true
+
+	case "VideoFile.url":
+		if e.complexity.VideoFile.URL == nil {
+			break
+		}
+
+		return e.complexity.VideoFile.URL(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -285,6 +323,21 @@ type QueryRoot {
     title: String!
     details: String
     participants: [Participant!]! @goField(forceResolver: true)
+}
+
+interface File {
+    id: UUID!
+    url: URL!
+}
+
+type AudioFile implements File {
+    id: UUID!
+    url: URL!
+}
+
+type VideoFile implements File {
+    id: UUID!
+    url: URL!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -360,6 +413,94 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _AudioFile_id(ctx context.Context, field graphql.CollectedField, obj *model.AudioFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AudioFile_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNUUID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AudioFile_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AudioFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type UUID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AudioFile_url(ctx context.Context, field graphql.CollectedField, obj *model.AudioFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AudioFile_url(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.URL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNURL2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AudioFile_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AudioFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type URL does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _Contributor_id(ctx context.Context, field graphql.CollectedField, obj *model.Contributor) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Contributor_id(ctx, field)
@@ -735,6 +876,7 @@ func (ec *executionContext) _QueryRoot_song(ctx context.Context, field graphql.C
 	})
 	if err != nil {
 		ec.Error(ctx, err)
+		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -799,6 +941,7 @@ func (ec *executionContext) _QueryRoot___type(ctx context.Context, field graphql
 	})
 	if err != nil {
 		ec.Error(ctx, err)
+		return graphql.Null
 	}
 	if resTmp == nil {
 		return graphql.Null
@@ -872,6 +1015,7 @@ func (ec *executionContext) _QueryRoot___schema(ctx context.Context, field graph
 	})
 	if err != nil {
 		ec.Error(ctx, err)
+		return graphql.Null
 	}
 	if resTmp == nil {
 		return graphql.Null
@@ -1082,6 +1226,94 @@ func (ec *executionContext) fieldContext_Song_participants(ctx context.Context, 
 				return ec.fieldContext_Participant_contributor(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Participant", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _VideoFile_id(ctx context.Context, field graphql.CollectedField, obj *model.VideoFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_VideoFile_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNUUID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_VideoFile_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "VideoFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type UUID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _VideoFile_url(ctx context.Context, field graphql.CollectedField, obj *model.VideoFile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_VideoFile_url(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.URL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNURL2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_VideoFile_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "VideoFile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type URL does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2864,9 +3096,67 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj model.File) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.AudioFile:
+		return ec._AudioFile(ctx, sel, &obj)
+	case *model.AudioFile:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._AudioFile(ctx, sel, obj)
+	case model.VideoFile:
+		return ec._VideoFile(ctx, sel, &obj)
+	case *model.VideoFile:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._VideoFile(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var audioFileImplementors = []string{"AudioFile", "File"}
+
+func (ec *executionContext) _AudioFile(ctx context.Context, sel ast.SelectionSet, obj *model.AudioFile) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, audioFileImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AudioFile")
+		case "id":
+
+			out.Values[i] = ec._AudioFile_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "url":
+
+			out.Values[i] = ec._AudioFile_url(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
 
 var contributorImplementors = []string{"Contributor"}
 
@@ -2984,6 +3274,7 @@ func (ec *executionContext) _QueryRoot(ctx context.Context, sel ast.SelectionSet
 	})
 
 	out := graphql.NewFieldSet(fields)
+	var invalids uint32
 	for i, field := range fields {
 		innerCtx := graphql.WithRootFieldContext(ctx, &graphql.RootFieldContext{
 			Object: field.Name,
@@ -3003,6 +3294,9 @@ func (ec *executionContext) _QueryRoot(ctx context.Context, sel ast.SelectionSet
 					}
 				}()
 				res = ec._QueryRoot_song(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -3030,6 +3324,9 @@ func (ec *executionContext) _QueryRoot(ctx context.Context, sel ast.SelectionSet
 		}
 	}
 	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
 	return out
 }
 
@@ -3081,6 +3378,41 @@ func (ec *executionContext) _Song(ctx context.Context, sel ast.SelectionSet, obj
 				return innerFunc(ctx)
 
 			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var videoFileImplementors = []string{"VideoFile", "File"}
+
+func (ec *executionContext) _VideoFile(ctx context.Context, sel ast.SelectionSet, obj *model.VideoFile) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, videoFileImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("VideoFile")
+		case "id":
+
+			out.Values[i] = ec._VideoFile_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "url":
+
+			out.Values[i] = ec._VideoFile_url(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3519,6 +3851,21 @@ func (ec *executionContext) unmarshalNString2string(ctx context.Context, v inter
 }
 
 func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNURL2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNURL2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalString(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

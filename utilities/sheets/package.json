@@ -1,0 +1,36 @@
+{
+  "name": "st-utilities",
+  "version": "1.0.0",
+  "description": "API for rendering sheetmusic and chord images on the server",
+  "main": "../../../BACKEND/src/ST.Utilities/dist/index.js",
+  "scripts": {
+    "clean": "../../../BACKEND/src/ST.Utilities/node_modules/.bin/tsc --build --clean",
+    "build": "../../../BACKEND/src/ST.Utilities/node_modules/.bin/tsc --build",
+    "launch": "npm i && npm start",
+    "start": "../../../BACKEND/src/ST.Utilities/node_modules/.bin/tsc && node ./dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@svgdotjs/svg.js": "3.0.16",
+    "@types/vexflow": "^3.0.1",
+    "canvas": "^2.11.0",
+    "dotenv": "^14.3.2",
+    "express": "^4.18.2",
+    "https": "^1.0.0",
+    "jsdom": "^20.0.3",
+    "opensheetmusicdisplay": "^1.7.4",
+    "svgdom": "^0.1.13",
+    "svgo": "^2.8.0",
+    "svguitar": "^1.16.1",
+    "typescript-collections": "^1.3.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.13.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}

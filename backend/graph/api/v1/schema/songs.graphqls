@@ -4,3 +4,18 @@ type Song {
     details: String
     participants: [Participant!]! @goField(forceResolver: true)
 }
+
+interface File {
+    id: UUID!
+    url: URL!
+}
+
+type AudioFile implements File {
+    id: UUID!
+    url: URL!
+}
+
+type VideoFile implements File {
+    id: UUID!
+    url: URL!
+}
