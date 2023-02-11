@@ -5,8 +5,10 @@ go 1.19
 require (
 	github.com/99designs/gqlgen v0.17.24
 	github.com/gin-gonic/gin v1.8.2
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/google/uuid v1.3.0
 	github.com/guregu/null v4.0.0+incompatible
+	github.com/samber/lo v1.37.0
 	github.com/vektah/gqlparser/v2 v2.5.1
 )
 
@@ -28,6 +30,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/ugorji/go/codec v1.2.9 // indirect
 	golang.org/x/crypto v0.5.0 // indirect
+	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect

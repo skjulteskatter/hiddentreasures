@@ -18,4 +18,6 @@ type Song struct {
 		Type      string
 		Copyright Reference
 	}
+	Details []struct {
+	}
 }
