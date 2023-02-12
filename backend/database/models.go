@@ -19,5 +19,7 @@ type Song struct {
 		Copyright Reference
 	}
 	Details []struct {
+		Content  BlockContent
+		Language Reference
 	}
 }
