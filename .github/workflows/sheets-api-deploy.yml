@@ -1,10 +1,10 @@
-name: Docker
+name: Deploy Sheets API
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    paths:
+      - utilities/sheets
 
 jobs:
   deploy:
