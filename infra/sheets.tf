@@ -75,4 +75,16 @@ resource "google_cloud_run_service" "sheets" {
     latest_revision = true
     percent         = 100
   }
+
+  lifecycle {
+    ignore_changes = [
+      metadata[0].labels,
+      metadata[0].annotations,
+      template[0].metadata[0].annotations,
+      template[0].metadata[0].labels,
+      template[0].spec[0].containers[0].image, // The image is managed by the deploy, we just need an initial one
+      traffic[0].latest_revision,
+      traffic[0].revision_name,
+    ]
+  }
 }
