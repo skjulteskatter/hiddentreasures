@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    command: ["postgres", "-c", "log_statement=all"]
+    image: postgres:13
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5400:5432/tcp"
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  redis:
+    image: redis
+    ports:
+      - "6300:6379"
+
+volumes:
+  db-data:
+    driver: local
+
