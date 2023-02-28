@@ -1,5 +1,13 @@
 api_env = {
-  SANITY_PROJECT_ID = ""
+  SHEETS_ADDRESS = "https://sheets."
+}
+
+sheets_env = {
+
+}
+
+directus_env = {
+
 }
 
 project_name = "hiddentreasures-platform"

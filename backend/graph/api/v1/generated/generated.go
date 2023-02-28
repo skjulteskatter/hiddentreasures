@@ -39,6 +39,7 @@ type ResolverRoot interface {
 	Contributor() ContributorResolver
 	Participant() ParticipantResolver
 	QueryRoot() QueryRootResolver
+	Sheet() SheetResolver
 	Song() SongResolver
 }
 
@@ -91,6 +92,12 @@ type ComplexityRoot struct {
 		ContentType func(childComplexity int) int
 		FileType    func(childComplexity int) int
 		ID          func(childComplexity int) int
+		Instruments func(childComplexity int) int
+		Render      func(childComplexity int, options *model.SheetRenderOptions) int
+	}
+
+	SheetRenderResult struct {
+		Parts func(childComplexity int) int
 	}
 
 	Song struct {
@@ -100,6 +107,7 @@ type ComplexityRoot struct {
 		ID           func(childComplexity int) int
 		Participants func(childComplexity int) int
 		Sheets       func(childComplexity int) int
+		Status       func(childComplexity int) int
 		Title        func(childComplexity int) int
 	}
 
@@ -123,6 +131,9 @@ type ParticipantResolver interface {
 type QueryRootResolver interface {
 	Song(ctx context.Context, id *string) (*model.Song, error)
 	Sheet(ctx context.Context, id *string) (*model.Sheet, error)
+}
+type SheetResolver interface {
+	Render(ctx context.Context, obj *model.Sheet, options *model.SheetRenderOptions) (*model.SheetRenderResult, error)
 }
 type SongResolver interface {
 	Details(ctx context.Context, obj *model.Song) (*model.LocalizedString, error)
@@ -338,6 +349,32 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Sheet.ID(childComplexity), true
 
+	case "Sheet.instruments":
+		if e.complexity.Sheet.Instruments == nil {
+			break
+		}
+
+		return e.complexity.Sheet.Instruments(childComplexity), true
+
+	case "Sheet.render":
+		if e.complexity.Sheet.Render == nil {
+			break
+		}
+
+		args, err := ec.field_Sheet_render_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Sheet.Render(childComplexity, args["options"].(*model.SheetRenderOptions)), true
+
+	case "SheetRenderResult.parts":
+		if e.complexity.SheetRenderResult.Parts == nil {
+			break
+		}
+
+		return e.complexity.SheetRenderResult.Parts(childComplexity), true
+
 	case "Song.audioFiles":
 		if e.complexity.Song.AudioFiles == nil {
 			break
@@ -379,6 +416,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Song.Sheets(childComplexity), true
+
+	case "Song.status":
+		if e.complexity.Song.Status == nil {
+			break
+		}
+
+		return e.complexity.Song.Status(childComplexity), true
 
 	case "Song.title":
 		if e.complexity.Song.Title == nil {
@@ -422,7 +466,9 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap()
+	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputSheetRenderOptions,
+	)
 	first := true
 
 	switch rc.Operation.Operation {
@@ -529,12 +575,18 @@ type LocalizedString {
     available: [LanguageKey!]!
 }
 
+enum Status {
+    published
+    unlisted
+}
+
 type QueryRoot {
     song(id: UUID): Song!
     sheet(id: UUID): Sheet!
 }`, BuiltIn: false},
 	{Name: "../schema/songs.graphqls", Input: `type Song {
     id: UUID!
+    status: Status!
     title: LocalizedString!
     collections: [SongCollection!]!
     details: LocalizedString @goField(forceResolver: true)
@@ -563,10 +615,35 @@ type VideoFile implements File {
     url: URL!
 }
 
+enum SheetClef {
+    alto
+    treble
+    bass
+}
+
+enum SheetSize {
+    large
+    medium
+    small
+}
+
+input SheetRenderOptions {
+    clef: SheetClef
+    instruments: [String!]
+    size: SheetSize
+    transposition: Int
+}
+
 type Sheet {
     id: UUID!
     fileType: SheetFileType!
     contentType: SheetContent!
+    instruments: [String!]!
+    render(options: SheetRenderOptions): SheetRenderResult! @goField(forceResolver: true)
+}
+
+type SheetRenderResult {
+    parts: [String!]!
 }
 
 enum SheetContent {
@@ -580,7 +657,6 @@ enum SheetContent {
 enum SheetFileType {
     musicxml
     pdf
-    sibelius
 }
 `, BuiltIn: false},
 }
@@ -632,6 +708,21 @@ func (ec *executionContext) field_QueryRoot_song_args(ctx context.Context, rawAr
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Sheet_render_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.SheetRenderOptions
+	if tmp, ok := rawArgs["options"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("options"))
+		arg0, err = ec.unmarshalOSheetRenderOptions2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetRenderOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["options"] = arg0
 	return args, nil
 }
 
@@ -1660,6 +1751,8 @@ func (ec *executionContext) fieldContext_QueryRoot_song(ctx context.Context, fie
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Song_id(ctx, field)
+			case "status":
+				return ec.fieldContext_Song_status(ctx, field)
 			case "title":
 				return ec.fieldContext_Song_title(ctx, field)
 			case "collections":
@@ -1735,6 +1828,10 @@ func (ec *executionContext) fieldContext_QueryRoot_sheet(ctx context.Context, fi
 				return ec.fieldContext_Sheet_fileType(ctx, field)
 			case "contentType":
 				return ec.fieldContext_Sheet_contentType(ctx, field)
+			case "instruments":
+				return ec.fieldContext_Sheet_instruments(ctx, field)
+			case "render":
+				return ec.fieldContext_Sheet_render(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Sheet", field.Name)
 		},
@@ -2014,6 +2111,153 @@ func (ec *executionContext) fieldContext_Sheet_contentType(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Sheet_instruments(ctx context.Context, field graphql.CollectedField, obj *model.Sheet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Sheet_instruments(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Instruments, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Sheet_instruments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Sheet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Sheet_render(ctx context.Context, field graphql.CollectedField, obj *model.Sheet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Sheet_render(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Sheet().Render(rctx, obj, fc.Args["options"].(*model.SheetRenderOptions))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.SheetRenderResult)
+	fc.Result = res
+	return ec.marshalNSheetRenderResult2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetRenderResult(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Sheet_render(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Sheet",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "parts":
+				return ec.fieldContext_SheetRenderResult_parts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SheetRenderResult", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Sheet_render_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SheetRenderResult_parts(ctx context.Context, field graphql.CollectedField, obj *model.SheetRenderResult) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SheetRenderResult_parts(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Parts, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SheetRenderResult_parts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SheetRenderResult",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Song_id(ctx context.Context, field graphql.CollectedField, obj *model.Song) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Song_id(ctx, field)
 	if err != nil {
@@ -2053,6 +2297,50 @@ func (ec *executionContext) fieldContext_Song_id(ctx context.Context, field grap
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type UUID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Song_status(ctx context.Context, field graphql.CollectedField, obj *model.Song) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Song_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Status)
+	fc.Result = res
+	return ec.marshalNStatus2githubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐStatus(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Song_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Song",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Status does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2356,6 +2644,10 @@ func (ec *executionContext) fieldContext_Song_sheets(ctx context.Context, field 
 				return ec.fieldContext_Sheet_fileType(ctx, field)
 			case "contentType":
 				return ec.fieldContext_Sheet_contentType(ctx, field)
+			case "instruments":
+				return ec.fieldContext_Sheet_instruments(ctx, field)
+			case "render":
+				return ec.fieldContext_Sheet_render(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Sheet", field.Name)
 		},
@@ -4309,6 +4601,58 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputSheetRenderOptions(ctx context.Context, obj interface{}) (model.SheetRenderOptions, error) {
+	var it model.SheetRenderOptions
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"clef", "instruments", "size", "transposition"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "clef":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clef"))
+			it.Clef, err = ec.unmarshalOSheetClef2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetClef(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "instruments":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("instruments"))
+			it.Instruments, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "size":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("size"))
+			it.Size, err = ec.unmarshalOSheetSize2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetSize(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "transposition":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("transposition"))
+			it.Transposition, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4703,18 +5047,73 @@ func (ec *executionContext) _Sheet(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Sheet_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "fileType":
 
 			out.Values[i] = ec._Sheet_fileType(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "contentType":
 
 			out.Values[i] = ec._Sheet_contentType(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "instruments":
+
+			out.Values[i] = ec._Sheet_instruments(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "render":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Sheet_render(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var sheetRenderResultImplementors = []string{"SheetRenderResult"}
+
+func (ec *executionContext) _SheetRenderResult(ctx context.Context, sel ast.SelectionSet, obj *model.SheetRenderResult) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sheetRenderResultImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SheetRenderResult")
+		case "parts":
+
+			out.Values[i] = ec._SheetRenderResult_parts(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -4743,6 +5142,13 @@ func (ec *executionContext) _Song(ctx context.Context, sel ast.SelectionSet, obj
 		case "id":
 
 			out.Values[i] = ec._Song_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "status":
+
+			out.Values[i] = ec._Song_status(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
@@ -5523,6 +5929,20 @@ func (ec *executionContext) marshalNSheetFileType2githubᚗcomᚋskjulteskatter�
 	return v
 }
 
+func (ec *executionContext) marshalNSheetRenderResult2githubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetRenderResult(ctx context.Context, sel ast.SelectionSet, v model.SheetRenderResult) graphql.Marshaler {
+	return ec._SheetRenderResult(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSheetRenderResult2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetRenderResult(ctx context.Context, sel ast.SelectionSet, v *model.SheetRenderResult) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SheetRenderResult(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNSong2githubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v model.Song) graphql.Marshaler {
 	return ec._Song(ctx, sel, &v)
 }
@@ -5591,6 +6011,16 @@ func (ec *executionContext) marshalNSongCollection2ᚖgithubᚗcomᚋskjulteskat
 	return ec._SongCollection(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNStatus2githubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐStatus(ctx context.Context, v interface{}) (model.Status, error) {
+	var res model.Status
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNStatus2githubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐStatus(ctx context.Context, sel ast.SelectionSet, v model.Status) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -5604,6 +6034,38 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalNURL2string(ctx context.Context, v interface{}) (string, error) {
@@ -5936,6 +6398,84 @@ func (ec *executionContext) marshalOLocalizedString2ᚖgithubᚗcomᚋskjulteska
 		return graphql.Null
 	}
 	return ec._LocalizedString(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOSheetClef2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetClef(ctx context.Context, v interface{}) (*model.SheetClef, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.SheetClef)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOSheetClef2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetClef(ctx context.Context, sel ast.SelectionSet, v *model.SheetClef) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOSheetRenderOptions2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetRenderOptions(ctx context.Context, v interface{}) (*model.SheetRenderOptions, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSheetRenderOptions(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOSheetSize2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetSize(ctx context.Context, v interface{}) (*model.SheetSize, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.SheetSize)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOSheetSize2ᚖgithubᚗcomᚋskjulteskatterᚋhiddentreasuresᚋbackendᚋgraphᚋapiᚋv1ᚋmodelᚐSheetSize(ctx context.Context, sel ast.SelectionSet, v *model.SheetSize) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

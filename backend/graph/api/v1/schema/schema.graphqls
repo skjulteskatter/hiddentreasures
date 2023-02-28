@@ -12,6 +12,11 @@ type LocalizedString {
     available: [LanguageKey!]!
 }
 
+enum Status {
+    published
+    unlisted
+}
+
 type QueryRoot {
     song(id: UUID): Song!
     sheet(id: UUID): Sheet!

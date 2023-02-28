@@ -1,5 +1,6 @@
 type Song {
     id: UUID!
+    status: Status!
     title: LocalizedString!
     collections: [SongCollection!]!
     details: LocalizedString @goField(forceResolver: true)
@@ -28,10 +29,35 @@ type VideoFile implements File {
     url: URL!
 }
 
+enum SheetClef {
+    alto
+    treble
+    bass
+}
+
+enum SheetSize {
+    large
+    medium
+    small
+}
+
+input SheetRenderOptions {
+    clef: SheetClef
+    instruments: [String!]
+    size: SheetSize
+    transposition: Int
+}
+
 type Sheet {
     id: UUID!
     fileType: SheetFileType!
     contentType: SheetContent!
+    instruments: [String!]!
+    render(options: SheetRenderOptions): SheetRenderResult! @goField(forceResolver: true)
+}
+
+type SheetRenderResult {
+    parts: [String!]!
 }
 
 enum SheetContent {
@@ -45,5 +71,4 @@ enum SheetContent {
 enum SheetFileType {
     musicxml
     pdf
-    sibelius
 }

@@ -1,16 +1,16 @@
-resource "google_cloud_run_service" "api" {
-  name     = "api"
+resource "google_cloud_run_service" "directus" {
+  name     = "directus"
   location = "europe-west4"
 
   template {
     spec {
-      service_account_name = google_service_account.public-api.email
+      service_account_name = google_service_account.directus.email
 
       containers {
         image = "us-docker.pkg.dev/cloudrun/container/hello"
 
         dynamic "env" {
-          for_each = module.api_secrets.data
+          for_each = module.directus_secrets.data
           iterator = v
           content {
             name = v.value.name
@@ -24,7 +24,7 @@ resource "google_cloud_run_service" "api" {
         }
 
         dynamic "env" {
-          for_each = var.api_env
+          for_each = var.directus_env
           iterator = v
           content {
             name = v.key
@@ -55,18 +55,9 @@ resource "google_cloud_run_service" "api" {
   }
 }
 
-resource "google_cloud_run_service_iam_policy" "public-api" {
+resource "google_cloud_run_service_iam_policy" "public-directus" {
   project     = google_project.default.project_id
   service     = google_cloud_run_service.api.name
   location    = google_cloud_run_service.api.location
   policy_data = data.google_iam_policy.public.policy_data
-}
-
-data "google_iam_policy" "public" {
-  binding {
-    role = "roles/run.invoker"
-    members = [
-      "allUsers",
-    ]
-  }
 }

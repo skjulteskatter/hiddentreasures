@@ -55,13 +55,27 @@ type Participant struct {
 }
 
 type Sheet struct {
-	ID          string        `json:"id"`
-	FileType    SheetFileType `json:"fileType"`
-	ContentType SheetContent  `json:"contentType"`
+	ID          string             `json:"id"`
+	FileType    SheetFileType      `json:"fileType"`
+	ContentType SheetContent       `json:"contentType"`
+	Instruments []string           `json:"instruments"`
+	Render      *SheetRenderResult `json:"render"`
+}
+
+type SheetRenderOptions struct {
+	Clef          *SheetClef `json:"clef"`
+	Instruments   []string   `json:"instruments"`
+	Size          *SheetSize `json:"size"`
+	Transposition *int       `json:"transposition"`
+}
+
+type SheetRenderResult struct {
+	Parts []string `json:"parts"`
 }
 
 type Song struct {
 	ID           string            `json:"id"`
+	Status       Status            `json:"status"`
 	Title        *LocalizedString  `json:"title"`
 	Collections  []*SongCollection `json:"collections"`
 	Details      *LocalizedString  `json:"details"`
@@ -221,6 +235,49 @@ func (e ParticipantType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+type SheetClef string
+
+const (
+	SheetClefAlto   SheetClef = "alto"
+	SheetClefTreble SheetClef = "treble"
+	SheetClefBass   SheetClef = "bass"
+)
+
+var AllSheetClef = []SheetClef{
+	SheetClefAlto,
+	SheetClefTreble,
+	SheetClefBass,
+}
+
+func (e SheetClef) IsValid() bool {
+	switch e {
+	case SheetClefAlto, SheetClefTreble, SheetClefBass:
+		return true
+	}
+	return false
+}
+
+func (e SheetClef) String() string {
+	return string(e)
+}
+
+func (e *SheetClef) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SheetClef(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SheetClef", str)
+	}
+	return nil
+}
+
+func (e SheetClef) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type SheetContent string
 
 const (
@@ -273,18 +330,16 @@ type SheetFileType string
 const (
 	SheetFileTypeMusicxml SheetFileType = "musicxml"
 	SheetFileTypePDF      SheetFileType = "pdf"
-	SheetFileTypeSibelius SheetFileType = "sibelius"
 )
 
 var AllSheetFileType = []SheetFileType{
 	SheetFileTypeMusicxml,
 	SheetFileTypePDF,
-	SheetFileTypeSibelius,
 }
 
 func (e SheetFileType) IsValid() bool {
 	switch e {
-	case SheetFileTypeMusicxml, SheetFileTypePDF, SheetFileTypeSibelius:
+	case SheetFileTypeMusicxml, SheetFileTypePDF:
 		return true
 	}
 	return false
@@ -308,5 +363,89 @@ func (e *SheetFileType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e SheetFileType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type SheetSize string
+
+const (
+	SheetSizeLarge  SheetSize = "large"
+	SheetSizeMedium SheetSize = "medium"
+	SheetSizeSmall  SheetSize = "small"
+)
+
+var AllSheetSize = []SheetSize{
+	SheetSizeLarge,
+	SheetSizeMedium,
+	SheetSizeSmall,
+}
+
+func (e SheetSize) IsValid() bool {
+	switch e {
+	case SheetSizeLarge, SheetSizeMedium, SheetSizeSmall:
+		return true
+	}
+	return false
+}
+
+func (e SheetSize) String() string {
+	return string(e)
+}
+
+func (e *SheetSize) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SheetSize(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SheetSize", str)
+	}
+	return nil
+}
+
+func (e SheetSize) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Status string
+
+const (
+	StatusPublished Status = "published"
+	StatusUnlisted  Status = "unlisted"
+)
+
+var AllStatus = []Status{
+	StatusPublished,
+	StatusUnlisted,
+}
+
+func (e Status) IsValid() bool {
+	switch e {
+	case StatusPublished, StatusUnlisted:
+		return true
+	}
+	return false
+}
+
+func (e Status) String() string {
+	return string(e)
+}
+
+func (e *Status) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Status(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Status", str)
+	}
+	return nil
+}
+
+func (e Status) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

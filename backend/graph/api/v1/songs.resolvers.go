@@ -11,6 +11,11 @@ import (
 	"github.com/skjulteskatter/hiddentreasures/backend/graph/api/v1/model"
 )
 
+// Render is the resolver for the render field.
+func (r *sheetResolver) Render(ctx context.Context, obj *model.Sheet, options *model.SheetRenderOptions) (*model.SheetRenderResult, error) {
+	panic(fmt.Errorf("not implemented: Render - render"))
+}
+
 // Details is the resolver for the details field.
 func (r *songResolver) Details(ctx context.Context, obj *model.Song) (*model.LocalizedString, error) {
 	panic(fmt.Errorf("not implemented: Details - details"))
@@ -26,9 +31,13 @@ func (r *songResolver) Sheets(ctx context.Context, obj *model.Song) ([]*model.Sh
 	panic(fmt.Errorf("not implemented: Sheets - sheets"))
 }
 
+// Sheet returns generated.SheetResolver implementation.
+func (r *Resolver) Sheet() generated.SheetResolver { return &sheetResolver{r} }
+
 // Song returns generated.SongResolver implementation.
 func (r *Resolver) Song() generated.SongResolver { return &songResolver{r} }
 
+type sheetResolver struct{ *Resolver }
 type songResolver struct{ *Resolver }
 
 // !!! WARNING !!!
