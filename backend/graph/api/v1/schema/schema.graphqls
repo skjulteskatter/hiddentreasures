@@ -14,4 +14,5 @@ type LocalizedString {
 
 type QueryRoot {
     song(id: UUID): Song!
+    sheet(id: UUID): Sheet!
 }

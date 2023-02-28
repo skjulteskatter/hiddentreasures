@@ -16,6 +16,11 @@ func (r *queryRootResolver) Song(ctx context.Context, id *string) (*model.Song, 
 	panic(fmt.Errorf("not implemented: Song - song"))
 }
 
+// Sheet is the resolver for the sheet field.
+func (r *queryRootResolver) Sheet(ctx context.Context, id *string) (*model.Sheet, error) {
+	panic(fmt.Errorf("not implemented: Sheet - sheet"))
+}
+
 // QueryRoot returns generated.QueryRootResolver implementation.
 func (r *Resolver) QueryRoot() generated.QueryRootResolver { return &queryRootResolver{r} }
 
