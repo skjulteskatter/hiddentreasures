@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - utilities/sheets/**
+      - .github/workflows/sheets-api-deploy.yml
 
 jobs:
   deploy:
