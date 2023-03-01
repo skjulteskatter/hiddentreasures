@@ -241,16 +241,8 @@ async function getOrSetOsmdInstance(
 
     //Key includes option that modifies the data before being loaded as an osmd instance
     const key: string = `${options.id}CLEF:${options.clef}DRAWPARTNAMES:${options.drawPartNames}PAGEFORMAT:${options.pageFormat}`
-
-    if (!osmdInstances[key]) {
-        osmdInstances[key] = await createOsmdInstance(options)
-
-        //Keep each value 2 minutes
-        setTimeout(() => delete osmdInstances[key], 120000)
-    }
-
-
-    return osmdInstances[key]
+   
+    return await createOsmdInstance(options)
 }
 
 type CreateOsmdInstanceOptions = {
