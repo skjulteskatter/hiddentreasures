@@ -4,3 +4,8 @@ terraform {
     prefix = "terraform/state"
   }
 }
+
+#resource "google_project_service" "compute" {
+#  project = google_project.default.project_id
+#  service = "compute.googleapis.com"
+#}

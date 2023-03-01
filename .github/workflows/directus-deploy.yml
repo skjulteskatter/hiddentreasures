@@ -1,0 +1,37 @@
+name: Deploy Directus
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - backend/**
+      - .github/workflows/directus-deploy.yml
+
+jobs:
+  deploy:
+    name: Deploy Directus
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: gcr.io/${{ vars.GCP_PROJECT_ID }}/directus:${{ github.sha }}
+    steps:
+      - name: Login
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          service_account_email: ${{ vars.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t $IMAGE_NAME ./cms
+
+      - name: Push Docker image
+        run: docker push $IMAGE_NAME
+
+      - name: Deploy Docker image
+        run: gcloud run deploy directus --image $IMAGE_NAME --region europe-west4
