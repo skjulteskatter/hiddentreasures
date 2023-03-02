@@ -1,5 +1,6 @@
 version: 1
-directus: 9.22.4
+directus: 9.23.1
+vendor: postgres
 collections:
   - collection: assets
     meta:
@@ -22,9 +23,29 @@ collections:
       translations: null
       unarchive_value: draft
     schema:
-      comment: null
       name: assets
-      schema: public
+  - collection: categories
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: status
+      archive_value: archived
+      collapse: open
+      collection: categories
+      color: '#A2B5CD'
+      display_template: '{{title}}'
+      group: null
+      hidden: false
+      icon: category
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 3
+      sort_field: null
+      translations: null
+      unarchive_value: draft
+    schema:
+      name: categories
   - collection: contributors
     meta:
       accountability: all
@@ -46,9 +67,7 @@ collections:
       translations: null
       unarchive_value: draft
     schema:
-      comment: null
       name: contributors
-      schema: public
   - collection: contributors_files
     meta:
       accountability: all
@@ -65,14 +84,34 @@ collections:
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: 3
+      sort: 6
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
-      comment: null
       name: contributors_files
-      schema: public
+  - collection: languages
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: languages
+      color: '#2ECDA7'
+      display_template: '{{label}}'
+      group: null
+      hidden: false
+      icon: language
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 5
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: languages
   - collection: participant_types
     meta:
       accountability: all
@@ -89,14 +128,12 @@ collections:
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: 4
+      sort: 7
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
-      comment: null
       name: participant_types
-      schema: public
   - collection: songs
     meta:
       accountability: all
@@ -118,9 +155,7 @@ collections:
       translations: null
       unarchive_value: draft
     schema:
-      comment: null
       name: songs
-      schema: public
   - collection: songs_assets
     meta:
       accountability: all
@@ -137,14 +172,34 @@ collections:
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: null
+      sort: 10
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
-      comment: null
       name: songs_assets
-      schema: public
+  - collection: songs_categories
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: songs_categories
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 11
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: songs_categories
   - collection: songs_contributors
     meta:
       accountability: all
@@ -157,18 +212,60 @@ collections:
       display_template: null
       group: null
       hidden: true
-      icon: null
+      icon: import_export
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: 5
+      sort: 12
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
-      comment: null
       name: songs_contributors
-      schema: public
+  - collection: songs_tags
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: songs_tags
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 13
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: songs_tags
+  - collection: tags
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: status
+      archive_value: archived
+      collapse: open
+      collection: tags
+      color: '#FFC23B'
+      display_template: '{{title}}'
+      group: null
+      hidden: false
+      icon: tag
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 4
+      sort_field: null
+      translations: null
+      unarchive_value: draft
+    schema:
+      name: tags
   - collection: track_types
     meta:
       accountability: all
@@ -185,14 +282,12 @@ collections:
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: 6
+      sort: 8
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
-      comment: null
       name: track_types
-      schema: public
   - collection: video_types
     meta:
       accountability: all
@@ -209,17 +304,16 @@ collections:
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: 7
+      sort: 9
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
-      comment: null
       name: video_types
-      schema: public
 fields:
   - collection: assets
     field: date_created
+    type: timestamp
     meta:
       collection: assets
       conditions: null
@@ -242,27 +336,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: assets
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: assets
     field: date_updated
+    type: timestamp
     meta:
       collection: assets
       conditions: null
@@ -285,27 +376,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: assets
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: assets
     field: file
+    type: uuid
     meta:
       collection: assets
       conditions: null
@@ -327,27 +415,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: file
+      table: assets
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_files
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: file
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: uuid
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
   - collection: assets
     field: id
+    type: uuid
     meta:
       collection: assets
       conditions: null
@@ -369,27 +454,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: assets
       data_type: uuid
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: null
-      name: id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: uuid
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: assets
     field: status
+    type: string
     meta:
       collection: assets
       conditions: null
@@ -431,27 +513,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: status
+      table: assets
       data_type: character varying
       default_value: draft
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: status
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: string
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: assets
     field: track
+    type: alias
     meta:
       collection: assets
       conditions:
@@ -482,10 +561,9 @@ fields:
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: assets
     field: track_type
+    type: string
     meta:
       collection: assets
       conditions: null
@@ -507,27 +585,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: track_type
+      table: assets
       data_type: character varying
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: track_types
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: track_type
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: string
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: track_types
+      foreign_key_column: id
   - collection: assets
     field: type
+    type: string
     meta:
       collection: assets
       conditions: null
@@ -555,27 +630,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: type
+      table: assets
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: type
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: string
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: assets
     field: user_created
+    type: uuid
     meta:
       collection: assets
       conditions: null
@@ -598,27 +670,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: assets
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: assets
     field: user_updated
+    type: uuid
     meta:
       collection: assets
       conditions: null
@@ -641,27 +710,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: assets
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: assets
     field: video
+    type: alias
     meta:
       collection: assets
       conditions:
@@ -692,10 +758,9 @@ fields:
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: assets
     field: video_type
+    type: string
     meta:
       collection: assets
       conditions: null
@@ -717,27 +782,320 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: video_type
+      table: assets
       data_type: character varying
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: video_types
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: video_type
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: assets
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: video_types
+      foreign_key_column: id
+  - collection: categories
+    field: date_created
+    type: timestamp
+    meta:
+      collection: categories
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: categories
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: categories
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: categories
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: categories
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: categories
+    field: id
+    type: uuid
+    meta:
+      collection: categories
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: id
+      table: categories
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: categories
+    field: status
     type: string
+    meta:
+      collection: categories
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: $t:published
+            value: published
+            foreground: '#FFFFFF'
+            background: var(--primary)
+          - text: $t:draft
+            value: draft
+            foreground: '#18222F'
+            background: '#D3DAE4'
+          - text: $t:archived
+            value: archived
+            foreground: '#FFFFFF'
+            background: var(--warning)
+        showAsDot: true
+      field: status
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: $t:published
+            value: published
+          - text: $t:draft
+            value: draft
+          - text: $t:archived
+            value: archived
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: categories
+      data_type: character varying
+      default_value: draft
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: categories
+    field: title
+    type: text
+    meta:
+      collection: categories
+      conditions: null
+      display: raw
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: categories
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: categories
+    field: user_created
+    type: uuid
+    meta:
+      collection: categories
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: categories
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: categories
+    field: user_updated
+    type: uuid
+    meta:
+      collection: categories
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: categories
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: contributors
     field: birth_date
+    type: date
     meta:
       collection: contributors
       conditions: null
@@ -758,27 +1116,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: birth_date
+      table: contributors
       data_type: date
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: birth_date
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: date
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: date_created
+    type: timestamp
     meta:
       collection: contributors
       conditions: null
@@ -801,27 +1156,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: contributors
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: date_updated
+    type: timestamp
     meta:
       collection: contributors
       conditions: null
@@ -844,27 +1196,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: contributors
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: death_date
+    type: date
     meta:
       collection: contributors
       conditions: null
@@ -885,27 +1234,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: death_date
+      table: contributors
       data_type: date
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: death_date
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: date
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: details
+    type: alias
     meta:
       collection: contributors
       conditions: null
@@ -928,10 +1274,9 @@ fields:
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: contributors
     field: display_name
+    type: text
     meta:
       collection: contributors
       conditions: null
@@ -952,27 +1297,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: display_name
+      table: contributors
       data_type: text
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: display_name
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: text
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: first_name
+    type: string
     meta:
       collection: contributors
       conditions: null
@@ -993,27 +1335,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: first_name
+      table: contributors
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: first_name
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: string
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: id
+    type: uuid
     meta:
       collection: contributors
       conditions: null
@@ -1035,27 +1374,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: id
+      table: contributors
       data_type: uuid
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: null
-      name: id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: uuid
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: images
+    type: alias
     meta:
       collection: contributors
       conditions: null
@@ -1076,10 +1412,9 @@ fields:
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: contributors
     field: last_name
+    type: string
     meta:
       collection: contributors
       conditions: null
@@ -1100,27 +1435,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: last_name
+      table: contributors
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: last_name
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: string
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: middle_name
+    type: string
     meta:
       collection: contributors
       conditions: null
@@ -1141,27 +1473,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: middle_name
+      table: contributors
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: middle_name
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: string
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: name
+    type: alias
     meta:
       collection: contributors
       conditions: null
@@ -1184,10 +1513,9 @@ fields:
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: contributors
     field: status
+    type: string
     meta:
       collection: contributors
       conditions: null
@@ -1229,27 +1557,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: status
+      table: contributors
       data_type: character varying
       default_value: draft
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: status
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: string
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors
     field: user_created
+    type: uuid
     meta:
       collection: contributors
       conditions: null
@@ -1272,27 +1597,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: contributors
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: contributors
     field: user_updated
+    type: uuid
     meta:
       collection: contributors
       conditions: null
@@ -1315,27 +1637,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: contributors
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: contributors_files
     field: contributors_id
+    type: uuid
     meta:
       collection: contributors_files
       conditions: null
@@ -1356,27 +1675,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: contributors_id
+      table: contributors_files
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: contributors
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: contributors_id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors_files
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: contributors
+      foreign_key_column: id
   - collection: contributors_files
     field: directus_files_id
+    type: uuid
     meta:
       collection: contributors_files
       conditions: null
@@ -1397,27 +1713,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: directus_files_id
+      table: contributors_files
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_files
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: directus_files_id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: contributors_files
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
   - collection: contributors_files
     field: id
+    type: integer
     meta:
       collection: contributors_files
       conditions: null
@@ -1438,27 +1751,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: contributors_files
       data_type: integer
       default_value: nextval('contributors_files_id_seq'::regclass)
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: true
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: null
-      name: id
       numeric_precision: 32
       numeric_scale: 0
-      schema: public
-      table: contributors_files
-    type: integer
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contributors_files
     field: sort
+    type: integer
     meta:
       collection: contributors_files
       conditions: null
@@ -1479,27 +1789,260 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: sort
+      table: contributors_files
       data_type: integer
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: sort
       numeric_precision: 32
       numeric_scale: 0
-      schema: public
-      table: contributors_files
-    type: integer
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: languages
+    field: code
+    type: string
+    meta:
+      collection: languages
+      conditions: null
+      display: null
+      display_options: null
+      field: code
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: code
+      table: languages
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: languages
+    field: date_created
+    type: timestamp
+    meta:
+      collection: languages
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: languages
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: languages
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: languages
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: languages
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: languages
+    field: label
+    type: string
+    meta:
+      collection: languages
+      conditions: null
+      display: raw
+      display_options: null
+      field: label
+      group: null
+      hidden: false
+      interface: input
+      note: For internal use
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: label
+      table: languages
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: languages
+    field: user_created
+    type: uuid
+    meta:
+      collection: languages
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: languages
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: languages
+    field: user_updated
+    type: uuid
+    meta:
+      collection: languages
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: languages
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: participant_types
     field: date_created
+    type: timestamp
     meta:
       collection: participant_types
       conditions: null
@@ -1522,27 +2065,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: participant_types
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: participant_types
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: participant_types
     field: date_updated
+    type: timestamp
     meta:
       collection: participant_types
       conditions: null
@@ -1565,27 +2105,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: participant_types
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: participant_types
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: participant_types
     field: id
+    type: string
     meta:
       collection: participant_types
       conditions: null
@@ -1606,27 +2143,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: participant_types
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: 255
-      name: id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: participant_types
-    type: string
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: participant_types
     field: label
+    type: text
     meta:
       collection: participant_types
       conditions: null
@@ -1647,27 +2181,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: label
+      table: participant_types
       data_type: text
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: label
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: participant_types
-    type: text
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: participant_types
     field: user_created
+    type: uuid
     meta:
       collection: participant_types
       conditions: null
@@ -1690,27 +2221,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: participant_types
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: participant_types
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: participant_types
     field: user_updated
+    type: uuid
     meta:
       collection: participant_types
       conditions: null
@@ -1733,27 +2261,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: participant_types
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: participant_types
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: songs
     field: assets
+    type: alias
     meta:
       collection: songs
       conditions: null
@@ -1767,43 +2292,39 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: null
+      sort: 8
       special:
         - m2m
       translations: null
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: songs
-    field: contributors
+    field: categories
+    type: alias
     meta:
       collection: songs
       conditions: null
       display: related-values
       display_options: null
-      field: contributors
-      group: null
+      field: categories
+      group: metadata
       hidden: false
-      interface: list-o2m
+      interface: list-m2m
       note: null
-      options:
-        enableSelect: false
-        template: "{{contributor_id.display_name}}\_-\_{{type.label}}"
+      options: null
       readonly: false
       required: false
-      sort: null
+      sort: 2
       special:
-        - o2m
+        - m2m
       translations: null
       validation: null
       validation_message: null
       width: full
-    schema: null
-    type: alias
   - collection: songs
     field: date_created
+    type: timestamp
     meta:
       collection: songs
       conditions: null
@@ -1826,27 +2347,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: songs
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: songs
     field: date_updated
+    type: timestamp
     meta:
       collection: songs
       conditions: null
@@ -1869,27 +2387,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: songs
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: songs
     field: id
+    type: uuid
     meta:
       collection: songs
       conditions: null
@@ -1911,27 +2426,76 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: songs
       data_type: uuid
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: null
-      name: id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: uuid
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs
+    field: metadata
+    type: alias
+    meta:
+      collection: songs
+      conditions: null
+      display: null
+      display_options: null
+      field: metadata
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 10
+      special:
+        - alias
+        - group
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: songs
+    field: participants
+    type: alias
+    meta:
+      collection: songs
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{contributors_id.display_name}} - {{type}}'
+      field: participants
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options:
+        allowDuplicates: true
+        junctionFieldLocation: top
+        template: '{{contributors_id.display_name}} - {{type}}'
+      readonly: false
+      required: false
+      sort: 9
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: songs
     field: status
+    type: string
     meta:
       collection: songs
       conditions: null
@@ -1973,27 +2537,47 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: status
+      table: songs
       data_type: character varying
       default_value: draft
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: 255
-      name: status
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: string
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs
+    field: tags
+    type: alias
+    meta:
+      collection: songs
+      conditions: null
+      display: related-values
+      display_options: null
+      field: tags
+      group: metadata
+      hidden: false
+      interface: list-m2m
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 1
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: songs
     field: title
+    type: text
     meta:
       collection: songs
       conditions: null
@@ -2014,27 +2598,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: title
+      table: songs
       data_type: text
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: title
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: text
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: songs
     field: user_created
+    type: uuid
     meta:
       collection: songs
       conditions: null
@@ -2057,27 +2638,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: songs
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: songs
     field: user_updated
+    type: uuid
     meta:
       collection: songs
       conditions: null
@@ -2100,27 +2678,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: songs
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: songs_assets
     field: assets_id
+    type: uuid
     meta:
       collection: songs_assets
       conditions: null
@@ -2141,27 +2716,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: assets_id
+      table: songs_assets
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: assets
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: assets_id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_assets
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: assets
+      foreign_key_column: id
   - collection: songs_assets
     field: id
+    type: integer
     meta:
       collection: songs_assets
       conditions: null
@@ -2182,27 +2754,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: songs_assets
       data_type: integer
       default_value: nextval('songs_assets_id_seq'::regclass)
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: true
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: null
-      name: id
       numeric_precision: 32
       numeric_scale: 0
-      schema: public
-      table: songs_assets
-    type: integer
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: songs_assets
     field: songs_id
+    type: uuid
     meta:
       collection: songs_assets
       conditions: null
@@ -2223,27 +2792,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: songs_id
+      table: songs_assets
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: songs
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: songs_id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_assets
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: songs
+      foreign_key_column: id
   - collection: songs_assets
     field: sort
+    type: integer
     meta:
       collection: songs_assets
       conditions: null
@@ -2264,71 +2830,529 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: sort
+      table: songs_assets
       data_type: integer
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: sort
       numeric_precision: 32
       numeric_scale: 0
-      schema: public
-      table: songs_assets
-    type: integer
-  - collection: songs_contributors
-    field: contributor_id
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_categories
+    field: categories_id
+    type: uuid
     meta:
-      collection: songs_contributors
+      collection: songs_categories
       conditions: null
-      display: related-values
+      display: null
       display_options: null
-      field: contributor_id
+      field: categories_id
       group: null
-      hidden: false
-      interface: select-dropdown-m2o
+      hidden: true
+      interface: null
       note: null
       options: null
       readonly: false
       required: false
-      sort: 7
-      special:
-        - m2o
+      sort: null
+      special: null
       translations: null
       validation: null
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: categories_id
+      table: songs_categories
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: contributors
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: contributor_id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: categories
+      foreign_key_column: id
+  - collection: songs_categories
+    field: id
+    type: integer
+    meta:
+      collection: songs_categories
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: songs_categories
+      data_type: integer
+      default_value: nextval('songs_categories_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_categories
+    field: songs_id
     type: uuid
+    meta:
+      collection: songs_categories
+      conditions: null
+      display: null
+      display_options: null
+      field: songs_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: songs_id
+      table: songs_categories
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: songs
+      foreign_key_column: id
+  - collection: songs_categories
+    field: sort
+    type: integer
+    meta:
+      collection: songs_categories
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: songs_categories
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: songs_contributors
-    field: date_created
+    field: contributors_id
+    type: uuid
     meta:
       collection: songs_contributors
+      conditions: null
+      display: null
+      display_options: null
+      field: contributors_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contributors_id
+      table: songs_contributors
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: contributors
+      foreign_key_column: id
+  - collection: songs_contributors
+    field: id
+    type: integer
+    meta:
+      collection: songs_contributors
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: songs_contributors
+      data_type: integer
+      default_value: nextval('songs_contributors_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_contributors
+    field: songs_id
+    type: uuid
+    meta:
+      collection: songs_contributors
+      conditions: null
+      display: null
+      display_options: null
+      field: songs_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: songs_id
+      table: songs_contributors
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: songs
+      foreign_key_column: id
+  - collection: songs_contributors
+    field: sort
+    type: integer
+    meta:
+      collection: songs_contributors
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: songs_contributors
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_contributors
+    field: type
+    type: string
+    meta:
+      collection: songs_contributors
+      conditions: null
+      display: null
+      display_options: null
+      field: type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Author
+            value: author
+          - text: Composer
+            value: composer
+          - text: Arranger
+            value: arranger
+          - text: Editor
+            value: editor
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: type
+      table: songs_contributors
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_tags
+    field: id
+    type: integer
+    meta:
+      collection: songs_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: songs_tags
+      data_type: integer
+      default_value: nextval('songs_tags_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_tags
+    field: songs_id
+    type: uuid
+    meta:
+      collection: songs_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: songs_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: songs_id
+      table: songs_tags
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: songs
+      foreign_key_column: id
+  - collection: songs_tags
+    field: sort
+    type: integer
+    meta:
+      collection: songs_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: songs_tags
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: songs_tags
+    field: tags_id
+    type: uuid
+    meta:
+      collection: songs_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: tags_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: tags_id
+      table: songs_tags
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: tags
+      foreign_key_column: id
+  - collection: tags
+    field: date_created
+    type: timestamp
+    meta:
+      collection: tags
       conditions: null
       display: datetime
       display_options:
@@ -2341,7 +3365,7 @@ fields:
       options: null
       readonly: true
       required: false
-      sort: 3
+      sort: null
       special:
         - date-created
       translations: null
@@ -2349,29 +3373,26 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: tags
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: timestamp
-  - collection: songs_contributors
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
     field: date_updated
+    type: timestamp
     meta:
-      collection: songs_contributors
+      collection: tags
       conditions: null
       display: datetime
       display_options:
@@ -2384,7 +3405,7 @@ fields:
       options: null
       readonly: true
       required: false
-      sort: 5
+      sort: null
       special:
         - date-updated
       translations: null
@@ -2392,155 +3413,162 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: tags
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: timestamp
-  - collection: songs_contributors
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
     field: id
+    type: uuid
     meta:
-      collection: songs_contributors
+      collection: tags
       conditions: null
       display: null
       display_options: null
       field: id
       group: null
-      hidden: true
+      hidden: false
       interface: input
       note: null
       options: null
       readonly: true
       required: false
-      sort: 1
+      sort: null
       special:
         - uuid
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
-      comment: null
-      data_type: uuid
-      default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
-      max_length: null
       name: id
-      numeric_precision: null
-      numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: uuid
-  - collection: songs_contributors
-    field: song_id
-    meta:
-      collection: songs_contributors
-      conditions: null
-      display: related-values
-      display_options: null
-      field: song_id
-      group: null
-      hidden: false
-      interface: select-dropdown-m2o
-      note: null
-      options: null
-      readonly: false
-      required: false
-      sort: 6
-      special:
-        - m2o
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      comment: null
+      table: tags
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: songs
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: song_id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: uuid
-  - collection: songs_contributors
-    field: type
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
+    field: status
+    type: string
     meta:
-      collection: songs_contributors
+      collection: tags
       conditions: null
-      display: related-values
-      display_options: null
-      field: type
+      display: labels
+      display_options:
+        choices:
+          - text: $t:published
+            value: published
+            foreground: '#FFFFFF'
+            background: var(--primary)
+          - text: $t:draft
+            value: draft
+            foreground: '#18222F'
+            background: '#D3DAE4'
+          - text: $t:archived
+            value: archived
+            foreground: '#FFFFFF'
+            background: var(--warning)
+        showAsDot: true
+      field: status
       group: null
       hidden: false
-      interface: select-dropdown-m2o
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: $t:published
+            value: published
+          - text: $t:draft
+            value: draft
+          - text: $t:archived
+            value: archived
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: tags
+      data_type: character varying
+      default_value: draft
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
+    field: title
+    type: text
+    meta:
+      collection: tags
+      conditions: null
+      display: raw
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
       note: null
       options: null
       readonly: false
       required: false
-      sort: 8
-      special:
-        - m2o
+      sort: null
+      special: null
       translations: null
       validation: null
       validation_message: null
       width: full
     schema:
-      comment: null
-      data_type: character varying
+      name: title
+      table: tags
+      data_type: text
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: participant_types
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
-      max_length: 255
-      name: type
+      max_length: null
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: string
-  - collection: songs_contributors
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
     field: user_created
+    type: uuid
     meta:
-      collection: songs_contributors
+      collection: tags
       conditions: null
       display: user
       display_options: null
@@ -2553,7 +3581,7 @@ fields:
         template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
       readonly: true
       required: false
-      sort: 2
+      sort: null
       special:
         - user-created
       translations: null
@@ -2561,29 +3589,26 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: tags
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: uuid
-  - collection: songs_contributors
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: tags
     field: user_updated
+    type: uuid
     meta:
-      collection: songs_contributors
+      collection: tags
       conditions: null
       display: user
       display_options: null
@@ -2596,7 +3621,7 @@ fields:
         template: '{{avatar.$thumbnail}} {{first_name}} {{last_name}}'
       readonly: true
       required: false
-      sort: 4
+      sort: null
       special:
         - user-updated
       translations: null
@@ -2604,27 +3629,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: tags
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: songs_contributors
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: track_types
     field: date_created
+    type: timestamp
     meta:
       collection: track_types
       conditions: null
@@ -2647,27 +3669,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: track_types
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: track_types
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: track_types
     field: date_updated
+    type: timestamp
     meta:
       collection: track_types
       conditions: null
@@ -2690,27 +3709,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: track_types
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: track_types
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: track_types
     field: id
+    type: string
     meta:
       collection: track_types
       conditions: null
@@ -2731,27 +3747,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: track_types
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: 255
-      name: id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: track_types
-    type: string
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: track_types
     field: label
+    type: text
     meta:
       collection: track_types
       conditions: null
@@ -2772,27 +3785,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: label
+      table: track_types
       data_type: text
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: label
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: track_types
-    type: text
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: track_types
     field: user_created
+    type: uuid
     meta:
       collection: track_types
       conditions: null
@@ -2815,27 +3825,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: track_types
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: track_types
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: track_types
     field: user_updated
+    type: uuid
     meta:
       collection: track_types
       conditions: null
@@ -2858,27 +3865,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: track_types
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: track_types
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: video_types
     field: date_created
+    type: timestamp
     meta:
       collection: video_types
       conditions: null
@@ -2901,27 +3905,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_created
+      table: video_types
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: video_types
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: video_types
     field: date_updated
+    type: timestamp
     meta:
       collection: video_types
       conditions: null
@@ -2944,27 +3945,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: date_updated
+      table: video_types
       data_type: timestamp with time zone
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: date_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: video_types
-    type: timestamp
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: video_types
     field: id
+    type: string
     meta:
       collection: video_types
       conditions: null
@@ -2985,27 +3983,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: id
+      table: video_types
       data_type: character varying
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: true
-      is_unique: true
       max_length: 255
-      name: id
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: video_types
-    type: string
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: video_types
     field: label
+    type: text
     meta:
       collection: video_types
       conditions: null
@@ -3026,27 +4021,24 @@ fields:
       validation_message: null
       width: full
     schema:
-      comment: null
+      name: label
+      table: video_types
       data_type: text
       default_value: null
-      foreign_key_column: null
-      foreign_key_schema: null
-      foreign_key_table: null
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: false
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: label
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: video_types
-    type: text
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: video_types
     field: user_created
+    type: uuid
     meta:
       collection: video_types
       conditions: null
@@ -3069,27 +4061,24 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_created
+      table: video_types
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_created
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: video_types
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
   - collection: video_types
     field: user_updated
+    type: uuid
     meta:
       collection: video_types
       conditions: null
@@ -3112,28 +4101,25 @@ fields:
       validation_message: null
       width: half
     schema:
-      comment: null
+      name: user_updated
+      table: video_types
       data_type: uuid
       default_value: null
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      generation_expression: null
-      has_auto_increment: false
-      is_generated: false
-      is_nullable: true
-      is_primary_key: false
-      is_unique: false
       max_length: null
-      name: user_updated
       numeric_precision: null
       numeric_scale: null
-      schema: public
-      table: video_types
-    type: uuid
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
 relations:
   - collection: assets
     field: file
+    related_collection: directus_files
     meta:
       junction_field: null
       many_collection: assets
@@ -3144,18 +4130,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_files
     schema:
-      column: file
-      constraint_name: assets_file_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_files
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: assets
+      column: file
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: assets_file_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: assets
     field: track_type
+    related_collection: track_types
     meta:
       junction_field: null
       many_collection: assets
@@ -3166,18 +4151,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: track_types
     schema:
-      column: track_type
-      constraint_name: assets_track_type_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: track_types
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: assets
+      column: track_type
+      foreign_key_table: track_types
+      foreign_key_column: id
+      constraint_name: assets_track_type_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: assets
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: assets
@@ -3188,18 +4172,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_created
-      constraint_name: assets_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: assets
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: assets_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: assets
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: assets
@@ -3210,18 +4193,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_updated
-      constraint_name: assets_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: assets
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: assets_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: assets
     field: video_type
+    related_collection: video_types
     meta:
       junction_field: null
       many_collection: assets
@@ -3232,18 +4214,59 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: video_types
     schema:
-      column: video_type
-      constraint_name: assets_video_type_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: video_types
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: assets
+      column: video_type
+      foreign_key_table: video_types
+      foreign_key_column: id
+      constraint_name: assets_video_type_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: categories
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: categories
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: categories
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: categories_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: categories
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: categories
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: categories
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: categories_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: contributors
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: contributors
@@ -3254,18 +4277,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_created
-      constraint_name: contributors_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: contributors
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: contributors_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: contributors
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: contributors
@@ -3276,18 +4298,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_updated
-      constraint_name: contributors_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: contributors
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: contributors_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: contributors_files
     field: contributors_id
+    related_collection: contributors
     meta:
       junction_field: directus_files_id
       many_collection: contributors_files
@@ -3298,18 +4319,17 @@ relations:
       one_deselect_action: delete
       one_field: images
       sort_field: sort
-    related_collection: contributors
     schema:
-      column: contributors_id
-      constraint_name: contributors_files_contributors_id_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: contributors
-      on_delete: CASCADE
-      on_update: NO ACTION
       table: contributors_files
+      column: contributors_id
+      foreign_key_table: contributors
+      foreign_key_column: id
+      constraint_name: contributors_files_contributors_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
   - collection: contributors_files
     field: directus_files_id
+    related_collection: directus_files
     meta:
       junction_field: contributors_id
       many_collection: contributors_files
@@ -3320,18 +4340,59 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_files
     schema:
-      column: directus_files_id
-      constraint_name: contributors_files_directus_files_id_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_files
-      on_delete: CASCADE
-      on_update: NO ACTION
       table: contributors_files
+      column: directus_files_id
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: contributors_files_directus_files_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: languages
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: languages
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: languages
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: languages_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: languages
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: languages
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: languages
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: languages_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: participant_types
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: participant_types
@@ -3342,18 +4403,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
+      table: participant_types
       column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
       constraint_name: participant_types_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
       on_update: NO ACTION
-      table: participant_types
+      on_delete: NO ACTION
   - collection: participant_types
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: participant_types
@@ -3364,18 +4424,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_updated
-      constraint_name: participant_types_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: participant_types
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: participant_types_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: songs
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: songs
@@ -3386,18 +4445,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_created
-      constraint_name: songs_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: songs
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: songs_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: songs
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: songs
@@ -3408,18 +4466,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_updated
-      constraint_name: songs_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: songs
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: songs_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: songs_assets
     field: assets_id
+    related_collection: assets
     meta:
       junction_field: songs_id
       many_collection: songs_assets
@@ -3430,18 +4487,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: assets
     schema:
-      column: assets_id
-      constraint_name: songs_assets_assets_id_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: assets
-      on_delete: CASCADE
-      on_update: NO ACTION
       table: songs_assets
+      column: assets_id
+      foreign_key_table: assets
+      foreign_key_column: id
+      constraint_name: songs_assets_assets_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
   - collection: songs_assets
     field: songs_id
+    related_collection: songs
     meta:
       junction_field: assets_id
       many_collection: songs_assets
@@ -3452,87 +4508,146 @@ relations:
       one_deselect_action: delete
       one_field: assets
       sort_field: sort
-    related_collection: songs
     schema:
-      column: songs_id
-      constraint_name: songs_assets_songs_id_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: songs
-      on_delete: CASCADE
-      on_update: NO ACTION
       table: songs_assets
-  - collection: songs_contributors
-    field: contributor_id
+      column: songs_id
+      foreign_key_table: songs
+      foreign_key_column: id
+      constraint_name: songs_assets_songs_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: songs_categories
+    field: categories_id
+    related_collection: categories
     meta:
-      junction_field: null
+      junction_field: songs_id
+      many_collection: songs_categories
+      many_field: categories_id
+      one_allowed_collections: null
+      one_collection: categories
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: songs_categories
+      column: categories_id
+      foreign_key_table: categories
+      foreign_key_column: id
+      constraint_name: songs_categories_categories_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: songs_categories
+    field: songs_id
+    related_collection: songs
+    meta:
+      junction_field: categories_id
+      many_collection: songs_categories
+      many_field: songs_id
+      one_allowed_collections: null
+      one_collection: songs
+      one_collection_field: null
+      one_deselect_action: delete
+      one_field: categories
+      sort_field: sort
+    schema:
+      table: songs_categories
+      column: songs_id
+      foreign_key_table: songs
+      foreign_key_column: id
+      constraint_name: songs_categories_songs_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: songs_contributors
+    field: contributors_id
+    related_collection: contributors
+    meta:
+      junction_field: songs_id
       many_collection: songs_contributors
-      many_field: contributor_id
+      many_field: contributors_id
       one_allowed_collections: null
       one_collection: contributors
       one_collection_field: null
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: contributors
     schema:
-      column: contributor_id
-      constraint_name: songs_contributors_contributor_id_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: contributors
-      on_delete: CASCADE
-      on_update: NO ACTION
       table: songs_contributors
+      column: contributors_id
+      foreign_key_table: contributors
+      foreign_key_column: id
+      constraint_name: songs_contributors_contributors_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
   - collection: songs_contributors
-    field: song_id
+    field: songs_id
+    related_collection: songs
     meta:
-      junction_field: null
+      junction_field: contributors_id
       many_collection: songs_contributors
-      many_field: song_id
+      many_field: songs_id
       one_allowed_collections: null
       one_collection: songs
       one_collection_field: null
       one_deselect_action: delete
-      one_field: contributors
-      sort_field: null
-    related_collection: songs
+      one_field: participants
+      sort_field: sort
     schema:
-      column: song_id
-      constraint_name: songs_contributors_song_id_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
+      table: songs_contributors
+      column: songs_id
       foreign_key_table: songs
+      foreign_key_column: id
+      constraint_name: songs_contributors_songs_id_foreign
+      on_update: NO ACTION
       on_delete: CASCADE
-      on_update: NO ACTION
-      table: songs_contributors
-  - collection: songs_contributors
-    field: type
+  - collection: songs_tags
+    field: songs_id
+    related_collection: songs
     meta:
-      junction_field: null
-      many_collection: songs_contributors
-      many_field: type
+      junction_field: tags_id
+      many_collection: songs_tags
+      many_field: songs_id
       one_allowed_collections: null
-      one_collection: participant_types
+      one_collection: songs
+      one_collection_field: null
+      one_deselect_action: delete
+      one_field: tags
+      sort_field: sort
+    schema:
+      table: songs_tags
+      column: songs_id
+      foreign_key_table: songs
+      foreign_key_column: id
+      constraint_name: songs_tags_songs_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: songs_tags
+    field: tags_id
+    related_collection: tags
+    meta:
+      junction_field: songs_id
+      many_collection: songs_tags
+      many_field: tags_id
+      one_allowed_collections: null
+      one_collection: tags
       one_collection_field: null
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: participant_types
     schema:
-      column: type
-      constraint_name: songs_contributors_type_foreign
+      table: songs_tags
+      column: tags_id
+      foreign_key_table: tags
       foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: participant_types
-      on_delete: NO ACTION
+      constraint_name: songs_tags_tags_id_foreign
       on_update: NO ACTION
-      table: songs_contributors
-  - collection: songs_contributors
+      on_delete: CASCADE
+  - collection: tags
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
-      many_collection: songs_contributors
+      many_collection: tags
       many_field: user_created
       one_allowed_collections: null
       one_collection: directus_users
@@ -3540,21 +4655,20 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
+      table: tags
       column: user_created
-      constraint_name: songs_contributors_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
       foreign_key_table: directus_users
-      on_delete: NO ACTION
+      foreign_key_column: id
+      constraint_name: tags_user_created_foreign
       on_update: NO ACTION
-      table: songs_contributors
-  - collection: songs_contributors
+      on_delete: NO ACTION
+  - collection: tags
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
-      many_collection: songs_contributors
+      many_collection: tags
       many_field: user_updated
       one_allowed_collections: null
       one_collection: directus_users
@@ -3562,18 +4676,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
+      table: tags
       column: user_updated
-      constraint_name: songs_contributors_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
       foreign_key_table: directus_users
-      on_delete: NO ACTION
+      foreign_key_column: id
+      constraint_name: tags_user_updated_foreign
       on_update: NO ACTION
-      table: songs_contributors
+      on_delete: NO ACTION
   - collection: track_types
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: track_types
@@ -3584,18 +4697,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
+      table: track_types
       column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
       constraint_name: track_types_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
       on_update: NO ACTION
-      table: track_types
+      on_delete: NO ACTION
   - collection: track_types
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: track_types
@@ -3606,18 +4718,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_updated
-      constraint_name: track_types_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: track_types
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: track_types_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: video_types
     field: user_created
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: video_types
@@ -3628,18 +4739,17 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_created
-      constraint_name: video_types_user_created_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: video_types
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: video_types_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: video_types
     field: user_updated
+    related_collection: directus_users
     meta:
       junction_field: null
       many_collection: video_types
@@ -3650,13 +4760,11 @@ relations:
       one_deselect_action: nullify
       one_field: null
       sort_field: null
-    related_collection: directus_users
     schema:
-      column: user_updated
-      constraint_name: video_types_user_updated_foreign
-      foreign_key_column: id
-      foreign_key_schema: public
-      foreign_key_table: directus_users
-      on_delete: NO ACTION
-      on_update: NO ACTION
       table: video_types
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: video_types_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION

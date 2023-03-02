@@ -58,7 +58,7 @@ resource "google_cloud_run_service" "sheets" {
 
         resources {
           limits = {
-            "cpu"    = "1000m"
+            "cpu"    = "2000m"
             "memory" = "512Mi"
           }
           requests = {}
@@ -68,8 +68,6 @@ resource "google_cloud_run_service" "sheets" {
   }
 
   timeouts {}
-
-  autogenerate_revision_name = true
 
   traffic {
     latest_revision = true
