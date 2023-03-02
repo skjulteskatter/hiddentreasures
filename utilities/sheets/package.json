@@ -4,7 +4,6 @@
     "description": "API for rendering sheetmusic and chord images on the server",
     "main": "../../../BACKEND/src/ST.Utilities/dist/index.js",
     "scripts": {
-        "launch": "npm i && npm start",
         "start": "tsc && node ./build",
         "prettier": "prettier --write ."
     },

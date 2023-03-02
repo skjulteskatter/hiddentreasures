@@ -50,7 +50,10 @@ export async function getSheetMusicDetails(
     id: string
 ): Promise<SheetMusicDetails | null> {
     //Change this instance for a default instance
-    const instance: OpenSheetMusicDisplay | null = await getOrSetOsmdInstance({
+    const dom = new jsdom.JSDOM(`<!DOCTYPE html><head></head></html>`)
+    let window = dom.window
+
+    const instance: OpenSheetMusicDisplay | null = await getOrSetOsmdInstance(window, {
         id: id,
         clef: "treble",
         drawPartNames: true,
@@ -76,8 +79,12 @@ export async function getSheetMusicImages(
     let scale: number = options.width / _standardWidth
     let osmdInstance: OpenSheetMusicDisplay | null
 
+    const dom = new jsdom.JSDOM(`<!DOCTYPE html><head></head></html>`)
+    const window = dom.window
+    const document = window.document
+
     try {
-        osmdInstance = await getOrSetOsmdInstance(options)
+        osmdInstance = await getOrSetOsmdInstance(window, options)
 
         if (!osmdInstance) return []
 
@@ -236,13 +243,20 @@ async function getOrSetFile(id: string): Promise<string | null> {
 }
 
 async function getOrSetOsmdInstance(
+    window: Window,
     options: CreateOsmdInstanceOptions
 ): Promise<OpenSheetMusicDisplay | null> {
 
     //Key includes option that modifies the data before being loaded as an osmd instance
-    const key: string = `${options.id}CLEF:${options.clef}DRAWPARTNAMES:${options.drawPartNames}PAGEFORMAT:${options.pageFormat}`
-   
-    return await createOsmdInstance(options)
+    //const key: string = `${options.id}:CLEF:${options.clef}:DRAWPARTNAMES:${options.drawPartNames}:PAGEFORMAT:${options.pageFormat}`
+
+    // if (!osmdInstances[key]) {
+    //     osmdInstances[key] = await createOsmdInstance(options)
+    //
+    //     setTimeout(() => )
+    // }
+    //
+    return await createOsmdInstance(window, options)
 }
 
 type CreateOsmdInstanceOptions = {
@@ -254,10 +268,11 @@ type CreateOsmdInstanceOptions = {
 }
 
 async function createOsmdInstance(
+    window: any,
     options: CreateOsmdInstanceOptions
 ): Promise<OpenSheetMusicDisplay | null> {
+    const document = window.document
     const div = document.createElement("div")
-    div.id = `browserlessDiv`
     document.body.appendChild(div)
 
     div.width = options.width
