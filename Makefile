@@ -5,3 +5,6 @@ infra.apply:
 
 infra.init:
 	cd ./infra && terraform init
+
+diff:
+	./migrations/db_diff.sh $(name)
