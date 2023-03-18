@@ -12,13 +12,18 @@ import (
 )
 
 // Song is the resolver for the song field.
-func (r *queryRootResolver) Song(ctx context.Context, id *string) (*model.Song, error) {
+func (r *queryRootResolver) Song(ctx context.Context, id string) (*model.Song, error) {
 	panic(fmt.Errorf("not implemented: Song - song"))
 }
 
 // Sheet is the resolver for the sheet field.
-func (r *queryRootResolver) Sheet(ctx context.Context, id *string) (*model.Sheet, error) {
+func (r *queryRootResolver) Sheet(ctx context.Context, id string) (*model.Sheet, error) {
 	panic(fmt.Errorf("not implemented: Sheet - sheet"))
+}
+
+// Article is the resolver for the article field.
+func (r *queryRootResolver) Article(ctx context.Context, id string) (*model.Article, error) {
+	panic(fmt.Errorf("not implemented: Article - article"))
 }
 
 // QueryRoot returns generated.QueryRootResolver implementation.

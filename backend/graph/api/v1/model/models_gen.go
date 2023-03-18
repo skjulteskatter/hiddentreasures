@@ -14,6 +14,15 @@ type File interface {
 	GetURL() string
 }
 
+type Article struct {
+	ID           string           `json:"id"`
+	Title        *LocalizedString `json:"title"`
+	Content      *LocalizedString `json:"content"`
+	Participants []*Participant   `json:"participants"`
+	WrittenAt    string           `json:"writtenAt"`
+	PublishedAt  string           `json:"publishedAt"`
+}
+
 type AudioFile struct {
 	ID  string `json:"id"`
 	URL string `json:"url"`

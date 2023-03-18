@@ -1,0 +1,8 @@
+type Article {
+    id: ID!
+    title: LocalizedString!
+    content: LocalizedString! @goField(forceResolver: true)
+    participants: [Participant!]!
+    writtenAt: Date!
+    publishedAt: Date!
+}
