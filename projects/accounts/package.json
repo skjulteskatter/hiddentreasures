@@ -1,0 +1,19 @@
+{
+    "private": true,
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "prettier": "prettier --write ."
+    },
+    "devDependencies": {
+        "@nuxtjs/tailwindcss": "^6.6.4",
+        "firebase-admin": "^11.5.0",
+        "firebase-functions": "^4.2.1",
+        "firebase-functions-test": "^3.0.0",
+        "nuxt": "^3.3.1",
+        "prettier": "^2.8.6"
+    }
+}

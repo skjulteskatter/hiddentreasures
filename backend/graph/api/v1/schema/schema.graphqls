@@ -1,5 +1,6 @@
 schema {
     query: QueryRoot
+    mutation: MutationRoot
 }
 
 scalar UUID
@@ -8,19 +9,7 @@ scalar LanguageKey
 scalar DateTime
 scalar Date
 
-type LocalizedString {
-    value: LanguageKey!
-    language: LanguageKey!
-    available: [LanguageKey!]!
-}
-
 enum Status {
     published
     unlisted
-}
-
-type QueryRoot {
-    song(id: UUID!): Song!
-    sheet(id: UUID!): Sheet!
-    article(id: UUID!): Article!
 }

@@ -1,0 +1,13 @@
+type QueryRoot {
+    song(id: UUID!): Song!
+    sheet(id: UUID!): Sheet!
+    article(id: UUID!): Article!
+
+    currentUser: User!
+}
+
+type LocalizedString {
+    value: LanguageKey!
+    language: LanguageKey!
+    available: [LanguageKey!]!
+}

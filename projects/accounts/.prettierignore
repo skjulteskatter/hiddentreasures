@@ -1,0 +1,4 @@
+.nuxt
+node_modules
+build
+pnpm-lock.yaml

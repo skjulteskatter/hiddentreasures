@@ -1,0 +1,17 @@
+type User {
+    id: String!
+    email: String!
+    emailVerified: Boolean!
+
+    displayName: String!
+    firstName: String
+    middleName: String
+    lastName: String
+}
+
+input UpdateUserOptions {
+    displayName: String!
+    firstName: String
+    middleName: String
+    lastName: String
+}
