@@ -100,7 +100,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	echo "Ok, adding entry."
-	psql -h localhost -p 5400 -U app -c "INSERT INTO goose_db_version (version_id, is_applied, tstamp) VALUES (${NEW_MIGRATION_NO}, true, NOW());"
+	psql -h localhost -p 5400 -U app -c "INSERT INTO public.goose_db_version (version_id, is_applied, tstamp) VALUES (${NEW_MIGRATION_NO}, true, NOW());"
 else
 	echo "Skipping"
 fi
