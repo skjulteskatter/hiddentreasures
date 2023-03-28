@@ -13,3 +13,9 @@ directus_env = {
 project_name = "hiddentreasures-platform"
 
 sanity_project_id = "was9nyja"
+
+db = {
+  tier              = "db-f1-micro"
+  availability_type = "REGIONAL"
+  backups_enabled   = true
+}

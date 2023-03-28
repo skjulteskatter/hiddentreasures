@@ -17,3 +17,11 @@ variable "project_name" {
 variable "sanity_project_id" {
   type = string
 }
+
+variable "db" {
+  type = object({
+    tier              = string
+    availability_type = string
+    backups_enabled   = bool
+  })
+}
