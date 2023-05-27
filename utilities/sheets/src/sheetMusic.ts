@@ -32,7 +32,7 @@ import {
     OpenSheetMusicDisplay,
     TransposeCalculator,
     MXLHelper,
-} from "opensheetmusicdisplay"
+} from "sssf-opensheetmusicdisplay"
 import SheetMusicDetails from "./classes/SheetMusicDetails"
 import { client } from "./sanity"
 
