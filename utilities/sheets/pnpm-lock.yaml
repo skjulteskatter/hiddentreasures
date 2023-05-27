@@ -26,8 +26,8 @@ dependencies:
     specifier: ^20.0.3
     version: 20.0.3(canvas@2.11.0)
   sssf-opensheetmusicdisplay:
-    specifier: ^1.7.5
-    version: 1.7.5
+    specifier: ^1.7.6
+    version: 1.7.6
   svgdom:
     specifier: ^0.1.13
     version: 0.1.13
@@ -2533,8 +2533,8 @@ packages:
     dev: false
     optional: true
 
-  /sssf-opensheetmusicdisplay@1.7.5:
-    resolution: {integrity: sha512-8abe+QYz0E4IH359AR7LGReXd3tw9b6AROrlerPOPi/G7TRxYtKVWPM3YYKSn8xCLcFQUuP3/lQ13CuQlxfb7w==}
+  /sssf-opensheetmusicdisplay@1.7.6:
+    resolution: {integrity: sha512-sOw45pTnL0SnaLCM/FJkh6GldveYoROh9SWp/CyLkX1hVFG2L8OzavPxjm2ajYpkNOFifRZ4F9GtOZUADAF9Qw==}
     dependencies:
       '@types/vexflow': 1.2.38
       jszip: 3.10.1
